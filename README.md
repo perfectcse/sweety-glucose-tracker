@@ -82,7 +82,7 @@ sweety-glucose-tracker/
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/perfectcse/sweety-glucose-tracker.git
 cd sweety-glucose-tracker
 ```
 
@@ -210,3 +210,4 @@ Developed as a full-stack application assignment.
 ---
 
 **Sweety – Blood Glucose Tracker**
+
