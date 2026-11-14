@@ -25,8 +25,8 @@ A full-stack blood glucose tracking application built using React, Node.js, Expr
 
 ### Reports
 - Daily glucose report
-- Current-month report
-- Previous-month report
+- Month-to-date report (from the first day of the current month through the selected date)
+- Previous-month report (full previous calendar month)
 - Highest, lowest, average, and total readings
 - Daily reading breakdown
 
@@ -145,6 +145,22 @@ npm run dev
 
 Frontend URL: http://localhost:5173
 
+
+## Running Backend Tests
+
+From the server directory, run:
+
+```bash
+npm test
+```
+
+The automated backend tests cover:
+- User registration and required-field validation
+- Password hashing and email normalization
+- Glucose reading validation
+- Duplicate reading prevention
+- User-specific reading retrieval
+
 ## API Documentation
 
 ### Authentication
@@ -168,7 +184,7 @@ Frontend URL: http://localhost:5173
 | Method | Endpoint | Description |
 |---|---|---|
 | GET | /api/reports/daily | Daily report |
-| GET | /api/reports/current-month | Current-month report |
+| GET | /api/reports/current-month | Month-to-date report through the selected date |
 | GET | /api/reports/previous-month | Previous-month report |
 
 Protected endpoints require a Bearer JWT token.
@@ -180,6 +196,18 @@ Protected endpoints require a Bearer JWT token.
 - Duplicate readings for the same user, date, and slot are rejected.
 - Future dates are rejected.
 - Each user can access only their own readings.
+
+
+## Screenshots
+
+### Signup
+![Signup](docs/screenshots/Signup.png)
+
+### Sign-in
+![Sign-in](docs/screenshots/Sigin.png)
+
+### Dashboard
+![Dashboard](docs/screenshots/Dashboard.png)
 
 ## Assumptions and Future Improvements
 
@@ -194,7 +222,7 @@ Protected endpoints require a Bearer JWT token.
 - Pagination
 - PDF and CSV report exports
 - Reminder notifications
-- Automated frontend and backend tests
+- Expanded frontend test coverage and backend integration tests
 
 ## Security
 
@@ -210,4 +238,5 @@ Developed as a full-stack application assignment.
 ---
 
 **Sweety – Blood Glucose Tracker**
+
 
