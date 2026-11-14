@@ -1,4 +1,4 @@
-const prisma = require("../config/db");
+﻿const prisma = require("../config/db");
 
 const getSummary = (readings) => {
   const values = readings.map((reading) => reading.value);
@@ -117,19 +117,42 @@ const getMonthlyReport = async (req, res, startDate, endDate, label) => {
 
 // CURRENT MONTH REPORT
 const getCurrentMonthReport = async (req, res) => {
+  const selectedDate = req.query.date ||
+    new Date().toISOString().slice(0, 10);
+
+  if (!isValidDate(selectedDate)) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide a valid date in YYYY-MM-DD format."
+    });
+  }
+
+  const selected = new Date(`${selectedDate}T00:00:00.000Z`);
   const now = new Date();
 
+  const isCurrentMonth =
+    selected.getUTCFullYear() === now.getFullYear() &&
+    selected.getUTCMonth() === now.getMonth();
+
+  const isNotFuture = selected <= new Date(
+    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+  );
+
+  if (!isCurrentMonth || !isNotFuture) {
+    return res.status(400).json({
+      success: false,
+      message: "Please select a date within the current month."
+    });
+  }
+
   const startDate = new Date(Date.UTC(
-    now.getFullYear(),
-    now.getMonth(),
+    selected.getUTCFullYear(),
+    selected.getUTCMonth(),
     1
   ));
 
-  const endDate = new Date(Date.UTC(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    1
-  ));
+  const endDate = new Date(selected);
+  endDate.setUTCDate(endDate.getUTCDate() + 1);
 
   return getMonthlyReport(
     req, res, startDate, endDate, "current_month"
@@ -162,3 +185,4 @@ module.exports = {
   getCurrentMonthReport,
   getPreviousMonthReport
 };
+

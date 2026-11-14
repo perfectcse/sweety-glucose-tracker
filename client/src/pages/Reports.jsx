@@ -25,7 +25,7 @@ export default function Reports() {
         }
 
         const response = await api.get(endpoint, {
-          params: reportType === "daily" ? { date: selectedDate } : {},
+          params: ["daily", "current-month"].includes(reportType) ? { date: selectedDate } : {},
         });
 
         setReport(response.data);
@@ -56,20 +56,21 @@ export default function Reports() {
           <button
             key={value}
             className={reportType === value ? "report-tab active" : "report-tab"}
-            onClick={() => setReportType(value)}
+            onClick={() => { setReportType(value); if (value === "current-month") setSelectedDate(today()); }}
           >
             {label}
           </button>
         ))}
       </div>
 
-      {reportType === "daily" && (
+      {(reportType === "daily" || reportType === "current-month") && (
         <div className="report-date">
           <label htmlFor="report-date">Select date</label>
           <input
             id="report-date"
             type="date"
-            max={today()}
+            max={today()} 
+            min={reportType === "current-month" ? `${today().slice(0, 7)}-01` : undefined}
             value={selectedDate}
             onChange={(event) => setSelectedDate(event.target.value)}
           />
@@ -117,7 +118,7 @@ export default function Reports() {
             </div>
           </div>
 
-          {reportType === "daily" && (
+          {(reportType === "daily" || reportType === "current-month") && (
             <div className="table-wrapper report-table">
               <h3>Daily readings</h3>
               {report.readings?.length ? (
@@ -147,3 +148,5 @@ export default function Reports() {
     </section>
   );
 }
+
+
